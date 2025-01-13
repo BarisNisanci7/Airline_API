@@ -28,27 +28,21 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        // JWT'yi çerezlerden al
         Optional<String> tokenOptional = jwtUtils.getJwtFromCookies(request);
 
         try {
             if (tokenOptional.isPresent()) {
                 String token = tokenOptional.get();
 
-                // JWT'yi doğrula
                 if (jwtUtils.validateJwtToken(token)) {
-                    // Kullanıcı adını (email) JWT'den al
                     String username = jwtUtils.getEmailFromJwtToken(token);
 
-                    // Kullanıcı bilgilerini yükle
                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                    // Kimlik doğrulama token oluştur
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                    // SecurityContext'e kimlik doğrulamayı ekle
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
@@ -58,7 +52,6 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        // Bir sonraki filtreye geç
         filterChain.doFilter(request, response);
     }
 }
