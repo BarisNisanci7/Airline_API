@@ -10,7 +10,6 @@ import java.util.Optional;
 @Repository
 public interface RolesRepository extends JpaRepository<Role, Long> {
 
-    // Rolü enum ile sorgula
     Optional<Role> findByRoleName(AppRole name);
 
 }
