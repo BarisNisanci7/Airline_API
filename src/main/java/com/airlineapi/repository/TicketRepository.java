@@ -10,9 +10,7 @@ import java.util.List;
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
-    // Belirli bir uçuşa ait tüm biletleri getir
     List<Ticket> findByFlightId(Long flightId);
 
-    // Belirli bir uçuşa ait belirli durumdaki biletleri getir
     List<Ticket> findByFlightIdAndStatus(Long flightId, TicketStatus status);
 }
